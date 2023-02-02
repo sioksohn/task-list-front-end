@@ -6,7 +6,7 @@ const TASKS = [
   {
     id: 1,
     title: 'Mow the lawn',
-    isComplete: false,
+    isComplete: false
   },
   {
     id: 2,
@@ -16,12 +16,13 @@ const TASKS = [
 ];
 
 const App = () => {
-  
+  const [deleted, setDeleted] = useState(false);
   const [studentTasks, setTasks] = useState(TASKS);
-  console.log(studentTasks);
-  const updateTasks = updatedTask => {
+  const updateTasks = id => {
     const tasks = studentTasks.map(task => {
-      if (task.id === updatedTask.id) {
+      if (task.id === id) {
+        let updatedTask = {...task};
+        updatedTask.isComplete = !updatedTask.isComplete;
         return updatedTask;
       } else {
         return task;
@@ -30,6 +31,13 @@ const App = () => {
     setTasks(tasks);
   };
 
+  const deleteTasks = id => {
+    const tasks = studentTasks.filter(task => (task.id !== id));
+    setTasks(tasks);
+  };
+
+
+
   return (
     <div className="App">
       <header className="App-header">
@@ -37,7 +45,7 @@ const App = () => {
       </header>
       <main>
         <div>
-          <TaskList tasks={studentTasks} onUpdate={updateTasks}/>
+          <TaskList tasks={studentTasks} onUpdate={updateTasks} onDelete={deleteTasks}/>
         </div>
       </main>
     </div>
