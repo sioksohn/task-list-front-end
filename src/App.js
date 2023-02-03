@@ -1,4 +1,5 @@
-import React,{ useState } from 'react';
+import React,{ useState, useEffect } from 'react';
+import axios from 'axios';
 import TaskList from './components/TaskList.js';
 import './App.css';
 
@@ -14,9 +15,18 @@ const TASKS = [
     isComplete: true,
   },
 ];
+const taskBaseURL = 'https://task-list-api-c17.herokuapp.com';
+const getAllTasks = () => {
+  return axios
+    .get(`${taskBaseURL}/tasks`)
+    .then((response)=>{ 
+      console.log(response.data); 
+      return response.data;
+    })
+    .catch((error)=>{console.log(error.data);});
+};
 
 const App = () => {
-  const [deleted, setDeleted] = useState(false);
   const [studentTasks, setTasks] = useState(TASKS);
   const updateTasks = id => {
     const tasks = studentTasks.map(task => {
@@ -36,6 +46,16 @@ const App = () => {
     setTasks(tasks);
   };
 
+  const fetchTasks = () => {
+    getAllTasks()
+    .then(tasks => {
+      setTasks(tasks);
+    });
+  };
+
+  useEffect(()=>{
+    fetchTasks();
+  }, []);
 
 
   return (
